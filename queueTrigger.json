@@ -41,6 +41,13 @@
       "metadata": {
         "description": "The language worker runtime to load in the function app."
       }
+    },
+    "packageUri": {
+      "type": "string",
+      "metadata": {
+        "description": "The zip content url.",
+        "defaultValue": "https://writedelete562stor.blob.core.windows.net/queuetrigger/queuetrigger.zip"
+      }
     }
   },
   "variables": {
@@ -123,7 +130,7 @@
             },
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
-              "value": "https://writedelete562stor.blob.core.windows.net/queuetrigger/queuetrigger.zip"
+              "value": "[parameters('packageUri')]"
             }
           ]
         }
