@@ -44,9 +44,9 @@
     },
     "packageUri": {
       "type": "string",
-      "metadata": {
-        "description": "The zip content url.",
         "defaultValue": "https://writedelete562stor.blob.core.windows.net/queuetrigger/queuetrigger.zip"
+      "metadata": {
+        "description": "The zip content url."
       }
     }
   },
