@@ -64,7 +64,10 @@
       "sku": {
         "name": "[parameters('storageAccountType')]"
       },
-      "kind": "Storage"
+      "kind": "StorageV2",
+      "properties": {
+        "accessTier": "Cool"
+      }
     },
     {
       "type": "Microsoft.Web/serverfarms",
@@ -73,12 +76,7 @@
       "location": "[parameters('location')]",
       "sku": {
         "name": "Y1",
-        "tier": "Dynamic",
-        "size": "Y1",
-        "family": "Y"
-      },
-      "properties": {
-        "computeMode": "Dynamic"
+        "tier": "Dynamic"
       }
     },
     {
@@ -86,9 +84,6 @@
       "apiVersion": "2020-02-02",
       "name": "[variables('applicationInsightsName')]",
       "location": "[parameters('location')]",
-      "tags": {
-        "[format('hidden-link:{0}', resourceId('Microsoft.Web/sites', variables('applicationInsightsName')))]": "Resource"
-      },
       "properties": {
         "Application_Type": "web"
       },
@@ -126,7 +121,7 @@
             },
             {
               "name": "FUNCTIONS_WORKER_RUNTIME",
-              "value": "dotnet-isolated"
+              "value": "[parameters('functionWorkerRuntime')]"
             },
             {
               "name": "WEBSITE_RUN_FROM_PACKAGE",
@@ -139,17 +134,6 @@
         "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
         "[resourceId('Microsoft.Web/serverfarms', variables('hostingPlanName'))]",
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-      ]
-    },
-    {
-      "type": "Microsoft.Web/sites/extensions",
-      "apiVersion": "2022-03-01",
-      "name": "[format('{0}/{1}', parameters('functionAppName'), 'zipdeploy')]",
-      "properties": {
-        "packageUri": "[parameters('packageUri')]"
-      },
-      "dependsOn": [
-        "[resourceId('Microsoft.Web/sites', parameters('functionAppName'))]"
       ]
     }
   ]
