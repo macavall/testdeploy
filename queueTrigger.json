@@ -6,7 +6,7 @@
       "type": "string",
       "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]",
       "metadata": {
-        "description": "The name of the Azure Function app."
+        "description": "The name of the Azure Function app. "
       }
     },
     "storageAccountType": {
