@@ -41,12 +41,6 @@
       "metadata": {
         "description": "The language worker runtime to load in the function app."
       }
-    },
-    "packageUri": {
-      "type": "string",
-      "metadata": {
-        "description": "The zip content url."
-      }
     }
   },
   "variables": {
