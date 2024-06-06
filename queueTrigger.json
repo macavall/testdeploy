@@ -32,6 +32,7 @@
       "type": "string",
       "defaultValue": "dotnet-isolated",
       "allowedValues": [
+        "dotnet-isolated",
         "dotnet",
         "node",
         "python",
