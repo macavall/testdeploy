@@ -48,6 +48,18 @@
       "metadata": {
         "description": "The zip content url."
       }
+    },
+    "allowedOrigins": {
+      "type": "array",
+      "defaultValue": [
+        "https://functions.azure.com",
+        "https://functions-staging.azure.com",
+        "https://portal.azure.com",
+        "https://functions-next.azure.com"
+      ],
+      "metadata": {
+        "description": "List of allowed origins for CORS."
+      }
     }
   },
   "variables": {
@@ -127,7 +139,10 @@
               "name": "WEBSITE_RUN_FROM_PACKAGE",
               "value": "[parameters('packageUri')]"
             }
-          ]
+          ],
+          "cors": {
+            "allowedOrigins": "[parameters('allowedOrigins')]"
+          }
         }
       },
       "dependsOn": [
