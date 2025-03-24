@@ -48,7 +48,7 @@
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "[format('func-{0}', tolower(substring(uniqueString(resourceGroup().id),0,4)))]"
         },
         "serverFarmResourceGroup": {
             "type": "string",
