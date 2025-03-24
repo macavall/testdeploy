@@ -60,7 +60,7 @@
         },
         "serverFarmResourceGroup": {
             "type": "String",
-            "defaultValue": "resourceGroup().id"
+            "defaultValue": "[resourceGroup().id]"
         },
         "alwaysOn": {
             "type": "Bool",
