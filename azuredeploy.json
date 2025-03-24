@@ -1,0 +1,197 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "type": "String"
+        },
+        "name": {
+            "type": "String"
+        },
+        "location": {
+            "type": "String"
+        },
+        "use32BitWorkerProcess": {
+            "type": "Bool"
+        },
+        "ftpsState": {
+            "type": "String"
+        },
+        "storageAccountName": {
+            "type": "String"
+        },
+        "linuxFxVersion": {
+            "type": "String"
+        },
+        "sku": {
+            "type": "String"
+        },
+        "skuCode": {
+            "type": "String"
+        },
+        "workerSize": {
+            "type": "String"
+        },
+        "workerSizeId": {
+            "type": "String"
+        },
+        "numberOfWorkers": {
+            "type": "String"
+        },
+        "hostingPlanName": {
+            "type": "String"
+        },
+        "serverFarmResourceGroup": {
+            "type": "String"
+        },
+        "alwaysOn": {
+            "type": "Bool"
+        }
+    },
+    "variables": {
+        "contentShare": "macavallapp01fa8781"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "microsoft.insights/components/macavallapp01fa",
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+            ],
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/2fd64258-83d0-456d-8559-4461579559d5/resourceGroups/macavallapp01rg/providers/Microsoft.Insights/components/macavallapp01fa"
+            },
+            "kind": "functionapp,linux",
+            "properties": {
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
+                        },
+                        {
+                            "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                            "value": "[reference('microsoft.insights/components/macavallapp01fa', '2015-05-01').ConnectionString]"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_CONTENTSHARE",
+                            "value": "[variables('contentShare')]"
+                        }
+                    ],
+                    "cors": {
+                        "allowedOrigins": [
+                            "https://portal.azure.com"
+                        ]
+                    },
+                    "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
+                    "ftpsState": "[parameters('ftpsState')]",
+                    "linuxFxVersion": "[parameters('linuxFxVersion')]"
+                },
+                "clientAffinityEnabled": false,
+                "virtualNetworkSubnetId": null,
+                "functionsRuntimeAdminIsolationEnabled": false,
+                "publicNetworkAccess": "Enabled",
+                "httpsOnly": true,
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+                    "apiVersion": "2022-09-01",
+                    "name": "[concat(parameters('name'), '/scm')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "allow": false
+                    }
+                },
+                {
+                    "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+                    "apiVersion": "2022-09-01",
+                    "name": "[concat(parameters('name'), '/ftp')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "allow": false
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('hostingPlanName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            },
+            "kind": "linux",
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]",
+                "reserved": true,
+                "maximumElasticWorkerCount": "20",
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "microsoft.insights/components",
+            "apiVersion": "2020-02-02-preview",
+            "name": "macavallapp01fa",
+            "location": "eastus2",
+            "dependsOn": [],
+            "properties": {
+                "ApplicationId": "[parameters('name')]",
+                "Request_Source": "IbizaWebAppExtensionCreate",
+                "Flow_Type": "Redfield",
+                "Application_Type": "web",
+                "WorkspaceResourceId": "/subscriptions/2fd64258-83d0-456d-8559-4461579559d5/resourceGroups/DefaultResourceGroup-EUS2/providers/Microsoft.OperationalInsights/workspaces/DefaultWorkspace-2fd64258-83d0-456d-8559-4461579559d5-EUS2",
+                "DisableLocalAuth": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2",
+                "defaultToOAuthAuthentication": true,
+                "allowBlobPublicAccess": false,
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
+}
