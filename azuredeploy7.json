@@ -4,7 +4,7 @@
     "parameters": {
         "subscriptionId": {
             "type": "string",
-            "defaultValue": "subscription().subscriptionId)"
+            "defaultValue": "subscription().subscriptionId"
         },
         "name": {
             "type": "string",
