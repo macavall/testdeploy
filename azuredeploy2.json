@@ -4,7 +4,7 @@
     "parameters": {
         "name": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[format('functester123-{0}', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "location": {
             "type": "string",
