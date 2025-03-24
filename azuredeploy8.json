@@ -1,4 +1,4 @@
-{
+e{
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
@@ -28,35 +28,35 @@
         },
         "storageAccountName": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}stor', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "[format('func123{0}stor', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "netFrameworkVersion": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "v8.0"
         },
         "sku": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "ElasticPremium"
         },
         "skuCode": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "EP1"
         },
         "workerSize": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "3"
         },
         "workerSizeId": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "3"
         },
         "numberOfWorkers": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "1"
         },
         "hostingPlanName": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "[format('func123{0}ASP', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "serverFarmResourceGroup": {
             "type": "String",
@@ -64,7 +64,7 @@
         },
         "alwaysOn": {
             "type": "Bool",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "false"
         }
     },
     "variables": {
