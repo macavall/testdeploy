@@ -56,7 +56,7 @@
         },
         "serverFarmResourceGroup": {
             "type": "string",
-            "defaultValue": "uniqueString(resourceGroup().id)"
+            "defaultValue": "resourceGroup().id"
         },
         "alwaysOn": {
             "type": "bool",
