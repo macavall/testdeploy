@@ -8,7 +8,7 @@
         },
         "name": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "[format('functester123{0}fa', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "location": {
             "type": "String",
@@ -28,7 +28,7 @@
         },
         "storageAccountName": {
             "type": "String",
-            "defaultValue": "[format('functester123{0}', substring(uniqueString(resourceGroup().id),0,4))]"
+            "defaultValue": "[format('functester123{0}stor', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "netFrameworkVersion": {
             "type": "String",
