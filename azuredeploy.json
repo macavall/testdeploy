@@ -8,55 +8,55 @@
         },
         "location": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "East US 2"
         },
         "use32BitWorkerProcess": {
             "type": "bool",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "false"
         },
         "ftpsState": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "FtpsOnly"
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": ""
         },
         "netFrameworkVersion": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": ""
         },
         "sku": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "Premium0V3"
         },
         "skuCode": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "P0V3"
         },
         "workerSize": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "18"
         },
         "workerSizeId": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "18"
         },
         "numberOfWorkers": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "1"
         },
         "hostingPlanName": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "[format('func-{0}', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "serverFarmResourceGroup": {
             "type": "string",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "uniqueString(resourceGroup().id)"
         },
         "alwaysOn": {
             "type": "bool",
-            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
+            "defaultValue": "false"
         }
     },
     "variables": {},
