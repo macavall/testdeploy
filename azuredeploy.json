@@ -2,70 +2,79 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "subscriptionId": {
-            "type": "String"
-        },
         "name": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "location": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "use32BitWorkerProcess": {
-            "type": "Bool"
+            "type": "bool",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "ftpsState": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "storageAccountName": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
-        "linuxFxVersion": {
-            "type": "String"
+        "netFrameworkVersion": {
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "sku": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "skuCode": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "workerSize": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "workerSizeId": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "numberOfWorkers": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "hostingPlanName": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "serverFarmResourceGroup": {
-            "type": "String"
+            "type": "string",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         },
         "alwaysOn": {
-            "type": "Bool"
+            "type": "bool",
+            "defaultValue": "[format('func-{0}', uniqueString(resourceGroup().id))]"
         }
     },
-    "variables": {
-        "contentShare": "macavallapp01fa8781"
-    },
+    "variables": {},
     "resources": [
         {
-            "type": "Microsoft.Web/sites",
             "apiVersion": "2022-03-01",
             "name": "[parameters('name')]",
+            "type": "Microsoft.Web/sites",
+            "kind": "functionapp",
             "location": "[parameters('location')]",
+            "tags": {
+                "hidden-link: /app-insights-resource-id": "/subscriptions/2fd64258-83d0-456d-8559-4461579559d5/resourceGroups/testdeploy56rg/providers/Microsoft.Insights/components/testdeploy56AI"
+            },
             "dependsOn": [
-                "microsoft.insights/components/macavallapp01fa",
+                "microsoft.insights/components/testdeploy56AI",
                 "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
             ],
-            "tags": {
-                "hidden-link: /app-insights-resource-id": "/subscriptions/2fd64258-83d0-456d-8559-4461579559d5/resourceGroups/macavallapp01rg/providers/Microsoft.Insights/components/macavallapp01fa"
-            },
-            "kind": "functionapp,linux",
             "properties": {
                 "name": "[parameters('name')]",
                 "siteConfig": {
@@ -84,19 +93,11 @@
                         },
                         {
                             "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
-                            "value": "[reference('microsoft.insights/components/macavallapp01fa', '2015-05-01').ConnectionString]"
+                            "value": "[reference('microsoft.insights/components/testdeploy56AI', '2015-05-01').ConnectionString]"
                         },
                         {
                             "name": "AzureWebJobsStorage",
                             "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING",
-                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
-                        },
-                        {
-                            "name": "WEBSITE_CONTENTSHARE",
-                            "value": "[variables('contentShare')]"
                         }
                     ],
                     "cors": {
@@ -106,7 +107,8 @@
                     },
                     "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
                     "ftpsState": "[parameters('ftpsState')]",
-                    "linuxFxVersion": "[parameters('linuxFxVersion')]"
+                    "alwaysOn": "[parameters('alwaysOn')]",
+                    "netFrameworkVersion": "[parameters('netFrameworkVersion')]"
                 },
                 "clientAffinityEnabled": false,
                 "virtualNetworkSubnetId": null,
@@ -120,52 +122,52 @@
                     "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
                     "apiVersion": "2022-09-01",
                     "name": "[concat(parameters('name'), '/scm')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-                    ],
                     "properties": {
                         "allow": false
-                    }
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+                    ]
                 },
                 {
                     "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
                     "apiVersion": "2022-09-01",
                     "name": "[concat(parameters('name'), '/ftp')]",
-                    "dependsOn": [
-                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
-                    ],
                     "properties": {
                         "allow": false
-                    }
+                    },
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+                    ]
                 }
             ]
         },
         {
-            "type": "Microsoft.Web/serverfarms",
             "apiVersion": "2018-11-01",
             "name": "[parameters('hostingPlanName')]",
+            "type": "Microsoft.Web/serverfarms",
             "location": "[parameters('location')]",
+            "kind": "",
+            "tags": null,
             "dependsOn": [],
-            "sku": {
-                "Tier": "[parameters('sku')]",
-                "Name": "[parameters('skuCode')]"
-            },
-            "kind": "linux",
             "properties": {
                 "name": "[parameters('hostingPlanName')]",
                 "workerSize": "[parameters('workerSize')]",
                 "workerSizeId": "[parameters('workerSizeId')]",
                 "numberOfWorkers": "[parameters('numberOfWorkers')]",
-                "reserved": true,
-                "maximumElasticWorkerCount": "20",
                 "zoneRedundant": false
+            },
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
             }
         },
         {
-            "type": "microsoft.insights/components",
             "apiVersion": "2020-02-02-preview",
-            "name": "macavallapp01fa",
+            "name": "testdeploy56AI",
+            "type": "microsoft.insights/components",
             "location": "eastus2",
+            "tags": null,
             "dependsOn": [],
             "properties": {
                 "ApplicationId": "[parameters('name')]",
@@ -177,11 +179,12 @@
             }
         },
         {
-            "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2022-05-01",
+            "type": "Microsoft.Storage/storageAccounts",
             "name": "[parameters('storageAccountName')]",
-            "location": "[parameters('location')]",
             "dependsOn": [],
+            "location": "[parameters('location')]",
+            "tags": null,
             "sku": {
                 "name": "Standard_LRS"
             },
