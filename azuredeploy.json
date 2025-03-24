@@ -24,7 +24,7 @@
         },
         "netFrameworkVersion": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "v8.0"
         },
         "sku": {
             "type": "string",
