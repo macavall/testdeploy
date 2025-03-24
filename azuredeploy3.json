@@ -20,7 +20,7 @@
         },
         "storageAccountName": {
             "type": "string",
-            "defaultValue": ""
+            "defaultValue": "[format('func-{0}', substring(uniqueString(resourceGroup().id),0,4))]"
         },
         "netFrameworkVersion": {
             "type": "string",
