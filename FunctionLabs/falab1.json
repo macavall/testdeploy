@@ -1,0 +1,183 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "subscriptionId": {
+            "type": "String",
+            "defaultValue": "[subscription().subscriptionId]"
+        },
+        "name": {
+            "type": "String",
+            "defaultValue": "[format('fahostlab1{0}fa', substring(uniqueString(resourceGroup().id),0,4))]"
+        },
+        "location": {
+            "type": "String",
+            "defaultValue": "East US 2"
+        },
+        "use32BitWorkerProcess": {
+            "type": "Bool",
+            "defaultValue": "false"
+        },
+        "ftpsState": {
+            "type": "String",
+            "defaultValue": "FtpsOnly"
+        },
+        "storageAccountName": {
+            "type": "String",
+            "defaultValue": "[format('fahostlab1{0}stor', substring(uniqueString(resourceGroup().id),0,4))]"
+        },
+        "netFrameworkVersion": {
+            "type": "String",
+            "defaultValue": "v8.0"
+        },
+        "sku": {
+            "type": "String",
+            "defaultValue": "Standard"
+        },
+        "skuCode": {
+            "type": "String",
+            "defaultValue": "S1"
+        },
+        "workerSize": {
+            "type": "String",
+            "defaultValue": "0"
+        },
+        "workerSizeId": {
+            "type": "String",
+            "defaultValue": "0"
+        },
+        "numberOfWorkers": {
+            "type": "String",
+            "defaultValue": "1"
+        },
+        "hostingPlanName": {
+            "type": "String",
+            "defaultValue": "[format('fahostlab1{0}ASP', substring(uniqueString(resourceGroup().id),0,4))]"
+        },
+        "serverFarmResourceGroup": {
+            "type": "String",
+            "defaultValue": "[resourceGroup().id]"
+        },
+        "alwaysOn": {
+            "type": "Bool",
+            "defaultValue": "false"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2022-03-01",
+            "name": "[parameters('name')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[concat('Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]",
+                "[concat('Microsoft.Storage/storageAccounts/', parameters('storageAccountName'))]"
+            ],
+            "tags": {},
+            "kind": "functionapp",
+            "properties": {
+                "name": "[parameters('name')]",
+                "siteConfig": {
+                    "appSettings": [
+                        {
+                            "name": "FUNCTIONS_EXTENSION_VERSION",
+                            "value": "~4"
+                        },
+                        {
+                            "name": "FUNCTIONS_WORKER_RUNTIME",
+                            "value": "dotnet-isolated"
+                        },
+                        {
+                            "name": "WEBSITE_USE_PLACEHOLDER_DOTNETISOLATED",
+                            "value": "1"
+                        },
+                        {
+                            "name": "AzureWebJobsStorage",
+                            "value": "[concat('DefaultEndpointsProtocol=https;AccountName=',parameters('storageAccountName'),';AccountKey=',listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2022-05-01').keys[0].value,';EndpointSuffix=','core.windows.net')]"
+                        },
+                        {
+                            "name": "WEBSITE_RUN_FROM_PACKAGE",
+                            "value": "https://github.com/macavall/testdeploy/releases/download/falab1/falab1.zip"
+                        }
+                    ],
+                    "cors": {
+                        "allowedOrigins": [
+                            "https://ms.portal.azure.com"
+                        ]
+                    },
+                    "use32BitWorkerProcess": "[parameters('use32BitWorkerProcess')]",
+                    "ftpsState": "[parameters('ftpsState')]",
+                    "alwaysOn": "[parameters('alwaysOn')]",
+                    "netFrameworkVersion": "[parameters('netFrameworkVersion')]"
+                },
+                "clientAffinityEnabled": false,
+                "virtualNetworkSubnetId": null,
+                "functionsRuntimeAdminIsolationEnabled": false,
+                "publicNetworkAccess": "Enabled",
+                "httpsOnly": true,
+                "serverFarmId": "[concat('/subscriptions/', parameters('subscriptionId'),'/resourcegroups/', parameters('serverFarmResourceGroup'), '/providers/Microsoft.Web/serverfarms/', parameters('hostingPlanName'))]"
+            },
+            "resources": [
+                {
+                    "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+                    "apiVersion": "2022-09-01",
+                    "name": "[concat(parameters('name'), '/scm')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "allow": false
+                    }
+                },
+                {
+                    "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+                    "apiVersion": "2022-09-01",
+                    "name": "[concat(parameters('name'), '/ftp')]",
+                    "dependsOn": [
+                        "[resourceId('Microsoft.Web/sites', parameters('name'))]"
+                    ],
+                    "properties": {
+                        "allow": false
+                    }
+                }
+            ]
+        },
+        {
+            "type": "Microsoft.Web/serverfarms",
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('hostingPlanName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "sku": {
+                "Tier": "[parameters('sku')]",
+                "Name": "[parameters('skuCode')]"
+            },
+            "kind": "",
+            "properties": {
+                "name": "[parameters('hostingPlanName')]",
+                "workerSize": "[parameters('workerSize')]",
+                "workerSizeId": "[parameters('workerSizeId')]",
+                "numberOfWorkers": "[parameters('numberOfWorkers')]",
+                "zoneRedundant": false
+            }
+        },
+        {
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2022-05-01",
+            "name": "[parameters('storageAccountName')]",
+            "location": "[parameters('location')]",
+            "dependsOn": [],
+            "sku": {
+                "name": "Standard_LRS"
+            },
+            "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "minimumTlsVersion": "TLS1_2",
+                "defaultToOAuthAuthentication": true,
+                "allowBlobPublicAccess": false,
+                "publicNetworkAccess": "Enabled"
+            }
+        }
+    ]
+}
