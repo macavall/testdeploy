@@ -10,4 +10,4 @@ https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.github
 
 |Lab #|Lab Name|AzureDeployment Link|GitHub Code Repository|
 |--|--|--|--|
-|1|Function.json|[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmacavall%2Ftestdeploy%2Frefs%2Fheads%2Fmain%2FFunctionLabs%2Ffalab1.json)|[GitHub Link]([url](https://github.com/macavall/falab1/tree/lab1))|
+|1|Function.json|[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmacavall%2Ftestdeploy%2Frefs%2Fheads%2Fmain%2FFunctionLabs%2Ffalab1.json)|[GitHub Source Code](https://github.com/macavall/falab1/tree/lab1)|
