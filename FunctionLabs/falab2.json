@@ -98,7 +98,7 @@
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://github.com/macavall/testdeploy/releases/download/falab1/falab1.zip"
+                            "value": "https://github.com/macavall/testdeploy/releases/download/v1/fahostlab1.zip"
                         }
                     ],
                     "cors": {
@@ -176,7 +176,8 @@
                 "minimumTlsVersion": "TLS1_2",
                 "defaultToOAuthAuthentication": true,
                 "allowBlobPublicAccess": false,
-                "publicNetworkAccess": "Disabled"
+                "publicNetworkAccess": "Enabled",
+				"allowSharedKeyAccess": false
             }
         }
     ]
