@@ -98,7 +98,7 @@
                         },
                         {
                             "name": "WEBSITE_RUN_FROM_PACKAGE",
-                            "value": "https://github.com/macavall/testdeploy/releases/download/v1/fahostlab1.zip"
+                            "value": "https://github.com/macavall/testdeploy/releases/download/falab1/falab1.zip"
                         }
                     ],
                     "cors": {
